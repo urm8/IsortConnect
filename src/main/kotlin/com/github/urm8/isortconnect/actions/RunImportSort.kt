@@ -38,21 +38,18 @@ class RunImportSort : AnAction() {
                 .header("X-PROFILE", "black")
                 .timeout(Duration.ofSeconds(5))
                 .build()
-        try {
-            _client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply {
-                if (it.statusCode() != 200) {
-                    _log.warn("Got non 200 status code ${it.statusCode()}: ${it.body()}")
-                    return@thenApply
-                }
-                val sortedContents: String = it.body()!!
-                if (contents.compareTo(sortedContents) != 0 && document.isWritable) {
-                    WriteCommandAction.runWriteCommandAction(project) { document.setText(sortedContents) }
-                }
-
+        _client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply {
+            if (it.statusCode() != 200) {
+                _log.warn("Got non 200 status code ${it.statusCode()}: ${it.body()}")
+                return@thenApply
             }
-        } catch (e: Exception) {
-            _log.error("failed to get response from sorter", e)
-            return
+            val sortedContents: String = it.body()!!
+            if (contents.compareTo(sortedContents) != 0 && document.isWritable) {
+                WriteCommandAction.runWriteCommandAction(project) { document.setText(sortedContents) }
+            }
+
+        }.exceptionally {
+            _log.error("Oops, something went wrong ...", it)
         }
     }
 
