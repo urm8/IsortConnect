@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.urm8.isortconnect.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.urm8.isortconnect.MyBundle
 
 class MyApplicationService {
 
