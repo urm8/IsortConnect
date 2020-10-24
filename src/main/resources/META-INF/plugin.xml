@@ -6,6 +6,19 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.python</depends>
+    <!-- Text to display as description on Preferences/Settings | Plugin page -->
+    <description>
+        <![CDATA[
+      Demonstrates how to configure a plugin project for a PyCharm plugin.
+    ]]>
+    </description>
+    <change-notes>
+        <![CDATA[
+      <b>0.1.0</b> First release v2019.1 IntelliJ Platform / PyCharm<br>
+    ]]>
+    </change-notes>
+
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.urm8.isortconnect.services.MyApplicationService"/>
@@ -16,4 +29,12 @@
         <listener class="com.github.urm8.isortconnect.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+    <actions>
+        <action id="com.github.urm8.isortconnect.actions.RunImportSort" class="com.github.urm8.isortconnect.actions.RunImportSort"
+                text="Run isort">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt O"/>
+        </action>
+    </actions>
+    <idea-version since-build="193"/>
 </idea-plugin>
