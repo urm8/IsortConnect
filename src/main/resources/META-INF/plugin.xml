@@ -22,24 +22,25 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable
+        <projectConfigurable
                 parentId="tools"
                 id="com.github.urm8.isortconnect.settings.Configurable"
                 instance="com.github.urm8.isortconnect.settings.Configurable"
                 displayName="IsortConnect"/>
         <applicationService serviceImplementation="com.github.urm8.isortconnect.settings.AppState"/>
+        <vfs.asyncListener implementation="com.github.urm8.isortconnect.listeners.TomlFileListener"
+                           id="com.github.urm8.isortconnect.listeners.TomlFileListener"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.urm8.isortconnect.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
     <actions>
-        <action id="com.github.urm8.isortconnect.actions.RunImportSort" class="com.github.urm8.isortconnect.actions.RunImportSort"
+        <action id="com.github.urm8.isortconnect.actions.RunImportSort"
+                class="com.github.urm8.isortconnect.actions.RunImportSort"
                 text="Run isort">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt O"/>
         </action>
     </actions>
-    <idea-version since-build="193"/>
+    <idea-version since-build="202"/>
 </idea-plugin>

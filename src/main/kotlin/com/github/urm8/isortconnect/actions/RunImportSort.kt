@@ -34,7 +34,7 @@ class RunImportSort : AnAction() {
         val request = HttpRequest.newBuilder()
                 .uri(uri)
                 .POST(HttpRequest.BodyPublishers.ofString(contents, Charset.forName("utf-8")))
-                .header("X-PROFILE", "black")
+                .headers(*headers.toTypedArray())
                 .timeout(Duration.ofSeconds(5))
                 .build()
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply {
@@ -54,9 +54,11 @@ class RunImportSort : AnAction() {
 
 
     companion object {
+        val settings: AppState
+            get() = AppState.instance
+
         val uri: URI
             get() {
-                val settings = AppState.instance
                 if (settings.url.isBlank()) {
                     return URI.create("http://${AppState.DEFAULT_URL}")
                 }
@@ -65,6 +67,13 @@ class RunImportSort : AnAction() {
                     url = "http://${url}"
                 }
                 return URI.create(url)
+            }
+
+        val headers: List<String>
+            get() {
+                return settings.pyprojectConf?.run {
+                    this.flatMap { entry -> listOf("X-${entry.key.toUpperCase()}", entry.value) }
+                } ?: listOf()
             }
 
         val client: HttpClient
