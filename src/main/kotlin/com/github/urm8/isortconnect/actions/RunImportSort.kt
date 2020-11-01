@@ -4,10 +4,9 @@ import com.github.urm8.isortconnect.settings.AppState
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.application.Application
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.diagnostic.Logger
+import com.jetbrains.python.psi.PyFile
 import java.io.IOException
 import java.net.URI
 import java.net.http.HttpClient
@@ -17,7 +16,11 @@ import java.nio.charset.Charset
 import java.time.Duration
 
 class RunImportSort : AnAction() {
-    private val _app: Application = ApplicationManager.getApplication()
+
+    override fun update(e: AnActionEvent) {
+        super.update(e)
+        e.presentation.isEnabled = e.project != null && e.getData(CommonDataKeys.PSI_FILE) is PyFile
+    }
 
     override fun actionPerformed(e: AnActionEvent) {
         val editor = e.getRequiredData(CommonDataKeys.EDITOR)

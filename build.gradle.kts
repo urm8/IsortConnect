@@ -48,11 +48,10 @@ dependencies {
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
     pluginName = pluginName_
-    version = "2020.2"
-    type = "PY"
+    version = platformVersion
+    type = platformType
     downloadSources = false
     updateSinceUntilBuild = true
-
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
 }
