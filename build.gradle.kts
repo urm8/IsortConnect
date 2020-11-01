@@ -42,6 +42,7 @@ repositories {
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
+    implementation("org.tomlj:tomlj:1.0.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -50,13 +51,11 @@ intellij {
     pluginName = pluginName_
     version = platformVersion
     type = platformType
-    downloadSources = platformDownloadSources.toBoolean()
+    downloadSources = false
     updateSinceUntilBuild = true
-
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
 }
-
 
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
@@ -124,7 +123,4 @@ tasks {
         channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
     }
 
-    runIde {
-        setIdeDirectory("C:/Users/mm/AppData/Local/JetBrains/Toolbox/apps/PyCharm-P/ch-0/202.7319.64")
-    }
 }
