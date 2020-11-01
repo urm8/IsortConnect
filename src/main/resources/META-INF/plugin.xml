@@ -21,8 +21,12 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.urm8.isortconnect.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.urm8.isortconnect.services.MyProjectService"/>
+        <applicationConfigurable
+                parentId="tools"
+                id="com.github.urm8.isortconnect.settings.Configurable"
+                instance="com.github.urm8.isortconnect.settings.Configurable"
+                displayName="IsortConnect"/>
+        <applicationService serviceImplementation="com.github.urm8.isortconnect.settings.AppState"/>
     </extensions>
 
     <applicationListeners>

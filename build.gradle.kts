@@ -48,15 +48,14 @@ dependencies {
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
     pluginName = pluginName_
-    version = platformVersion
-    type = platformType
-    downloadSources = platformDownloadSources.toBoolean()
+    version = "2020.2"
+    type = "PY"
+    downloadSources = false
     updateSinceUntilBuild = true
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
 }
-
 
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
@@ -124,7 +123,4 @@ tasks {
         channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
     }
 
-    runIde {
-        setIdeDirectory("C:/Users/mm/AppData/Local/JetBrains/Toolbox/apps/PyCharm-P/ch-0/202.7319.64")
-    }
 }
