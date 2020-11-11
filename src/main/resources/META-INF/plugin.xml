@@ -28,12 +28,12 @@
                 instance="com.github.urm8.isortconnect.settings.Configurable"
                 displayName="IsortConnect"/>
         <applicationService serviceImplementation="com.github.urm8.isortconnect.settings.AppState"/>
-        <vfs.asyncListener implementation="com.github.urm8.isortconnect.listeners.TomlFileListener"
-                           id="com.github.urm8.isortconnect.listeners.TomlFileListener"/>
+        <vfs.asyncListener implementation="com.github.urm8.isortconnect.listeners.PyprojectTomlFileListener"
+                           id="com.github.urm8.isortconnect.listeners.PyprojectTomlFileListener"/>
+        <vfs.asyncListener implementation="com.github.urm8.isortconnect.listeners.PyFileListener"
+                           id="com.github.urm8.isortconnect.listeners.PyFileListener"/>
     </extensions>
 
-    <applicationListeners>
-    </applicationListeners>
     <actions>
         <action id="com.github.urm8.isortconnect.actions.RunImportSort"
                 class="com.github.urm8.isortconnect.actions.RunImportSort"

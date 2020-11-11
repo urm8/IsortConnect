@@ -43,6 +43,7 @@ repositories {
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
     implementation("org.tomlj:tomlj:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
 }
 
 // Configure gradle-intellij-plugin plugin.

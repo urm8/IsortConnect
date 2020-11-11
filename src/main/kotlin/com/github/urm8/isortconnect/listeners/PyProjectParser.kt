@@ -7,7 +7,7 @@ import org.tomlj.Toml
 import org.tomlj.TomlTable
 
 @Suppress("UNCHECKED_CAST")
-class TomlParser(private val tomlFile: VirtualFile) : AsyncFileListener.ChangeApplier {
+class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.ChangeApplier {
 
     override fun beforeVfsChange() {
     }
@@ -25,7 +25,7 @@ class TomlParser(private val tomlFile: VirtualFile) : AsyncFileListener.ChangeAp
             if (isortConfig?.isEmpty != false) {
                 return mapOf()
             }
-            return isortConfig!!.toMap().map { entry -> entry.key to entry.value.toString() }.toMap()
+            return isortConfig.toMap().map { entry -> entry.key to entry.value.toString() }.toMap()
         }
     }
 }

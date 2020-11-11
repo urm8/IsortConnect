@@ -1,5 +1,6 @@
 package com.github.urm8.isortconnect.settings
 
+import com.github.urm8.isortconnect.service.SorterService
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
@@ -44,7 +45,7 @@ class Component {
 
     private val checkBtn = JButton("Check connection").apply {
         this.addActionListener(ActionListener {
-            val isReachable = com.github.urm8.isortconnect.actions.RunImportSort.checkPing()
+            val isReachable = SorterService.ping()
             com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
         })
     }

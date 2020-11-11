@@ -1,6 +1,6 @@
 package com.github.urm8.isortconnect.settings
 
-import com.github.urm8.isortconnect.listeners.TomlParser
+import com.github.urm8.isortconnect.listeners.PyProjectParser
 import com.jetbrains.django.util.VirtualFileUtil
 import javax.swing.JComponent
 
@@ -28,7 +28,7 @@ class Configurable : com.intellij.openapi.options.Configurable {
         state.triggerOnSave = _component.triggerOnSave
         state.pyprojectToml = _component.pyprojectToml
         VirtualFileUtil.findFile(state.pyprojectToml)?.run {
-            state.pyprojectConf = TomlParser.parse(this)
+            state.pyprojectConf = PyProjectParser.parse(this)
         }
     }
 
