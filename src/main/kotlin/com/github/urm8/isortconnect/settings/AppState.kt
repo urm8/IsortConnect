@@ -11,7 +11,12 @@ import org.jetbrains.annotations.Nullable
     name = "com.github.urm8.isortconnect.settings.AppState",
     storages = [Storage("iSortConnect.xml")]
 )
-data class AppState(var url: String = DEFAULT_URL, var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE, var pyprojectToml: String = "", var pyprojectConf: Map<String, String>? = null) :
+data class AppState(
+    var url: String = DEFAULT_URL,
+    var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
+    var pyprojectToml: String = "",
+    var pyprojectConf: Map<String, String>? = null
+) :
     PersistentStateComponent<AppState> {
     @Nullable
     override fun getState(): AppState = this

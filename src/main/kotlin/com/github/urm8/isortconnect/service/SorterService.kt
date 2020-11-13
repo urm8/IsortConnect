@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import org.apache.http.HttpStatus
 import org.jetbrains.annotations.NotNull
 import java.io.IOException
 import java.net.URI
@@ -37,13 +38,12 @@ class SorterService(private val project: @NotNull Project) {
         val request = HttpRequest.newBuilder()
             .uri(uri)
             .POST(HttpRequest.BodyPublishers.ofString(contents, Charset.forName("utf-8")))
-            .headers(*headers.toTypedArray())
-            .timeout(Duration.ofSeconds(5))
-            .build()
-        var sortedContents: String? = null
+            .timeout(Duration.ofSeconds(defaultTimeOutSeconds))
 
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-        if (response.statusCode() != 200) {
+        headers.entries.forEach { entry -> request.header("X-${entry.key.toUpperCase()}", entry.value.toString()) }
+
+        val response = client.send(request.build(), HttpResponse.BodyHandlers.ofString())
+        if (response.statusCode() != HttpStatus.SC_OK) {
             logger.warn("Got non 200 status code ${response.statusCode()}: ${response.body()}")
         } else {
             response.body().run {
@@ -56,6 +56,7 @@ class SorterService(private val project: @NotNull Project) {
     }
 
     companion object {
+        const val defaultTimeOutSeconds: Long = 1
         private val settings: AppState
             get() = AppState.instance
 
@@ -71,11 +72,9 @@ class SorterService(private val project: @NotNull Project) {
                 return URI.create(url)
             }
 
-        val headers: List<String>
+        val headers: Map<String, Any>
             get() {
-                return settings.pyprojectConf?.run {
-                    this.flatMap { entry -> listOf("X-${entry.key.toUpperCase()}", entry.value) }
-                } ?: listOf()
+                return settings.pyprojectConf ?: mapOf()
             }
 
         val client: HttpClient
@@ -91,7 +90,7 @@ class SorterService(private val project: @NotNull Project) {
 
             return try {
                 val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-                response.statusCode() == 200 && response.body() == "pong"
+                response.statusCode() == HttpStatus.SC_OK && response.body() == "pong"
             } catch (e: IOException) {
                 Logger.getInstance(SorterService::class.java).error("Failed to connect", e)
                 false

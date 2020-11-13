@@ -8,7 +8,6 @@ import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.FormBuilder
-import java.awt.event.ActionListener
 import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -44,19 +43,18 @@ class Component {
         }
 
     private val checkBtn = JButton("Check connection").apply {
-        this.addActionListener(
-            ActionListener {
-                val isReachable = SorterService.ping()
-                com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
-            }
-        )
+        this.addActionListener {
+            val isReachable = SorterService.ping()
+            com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
+        }
     }
 
+    var topInset = 0
     val panel = FormBuilder.createFormBuilder()
-        .addLabeledComponent(JBLabel("Server Url"), urlTextField, 1, true)
-        .addLabeledComponent(JBLabel("Trigger On Save"), triggerOnSaveButton, 2, false)
-        .addLabeledComponent(JBLabel("Check connection"), checkBtn, 3, false)
-        .addLabeledComponent(JBLabel("pyproject.toml"), loadPyProjectTomlButton, 4, false)
+        .addLabeledComponent(JBLabel("Server Url"), urlTextField, ++topInset, true)
+        .addLabeledComponent(JBLabel("Trigger On Save"), triggerOnSaveButton, ++topInset, false)
+        .addLabeledComponent(JBLabel("Check connection"), checkBtn, ++topInset, false)
+        .addLabeledComponent(JBLabel("pyproject.toml"), loadPyProjectTomlButton, ++topInset, false)
         .addComponentFillVertically(JPanel(), 0)
         .panel
 }

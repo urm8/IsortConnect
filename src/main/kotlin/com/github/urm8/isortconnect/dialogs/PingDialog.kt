@@ -18,9 +18,15 @@ class PingDialog(private val isReachable: Boolean) : DialogWrapper(true) {
     override fun createCenterPanel(): JComponent? {
         val panel = JPanel(BorderLayout())
         val label = JLabel(if (isReachable) "Success!" else "Failed to connect!", SwingConstants.CENTER)
-        label.font = Font(label.font.name, Font.BOLD, 18)
-        label.preferredSize = Dimension(150, 20)
+        label.font = Font(label.font.name, Font.BOLD, fontSize)
+        label.preferredSize = Dimension(labelWight, labelHeight)
         panel.add(label, BorderLayout.CENTER)
         return panel
+    }
+
+    companion object {
+        const val fontSize = 18
+        const val labelHeight = 21
+        const val labelWight = 150
     }
 }

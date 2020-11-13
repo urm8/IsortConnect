@@ -61,6 +61,7 @@ intellij {
 // Configure detekt plugin.
 // Read more: https://detekt.github.io/detekt/kotlindsl.html
 detekt {
+    autoCorrect = true
     config = files("./detekt-config.yml")
     buildUponDefaultConfig = true
 

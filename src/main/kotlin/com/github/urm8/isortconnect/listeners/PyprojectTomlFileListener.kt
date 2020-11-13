@@ -9,12 +9,11 @@ class PyprojectTomlFileListener : AsyncFileListener {
     override fun prepareChange(p0: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
         val currentSettings = AppState.instance
         val tomlFilePath = currentSettings.pyprojectToml
-        if (tomlFilePath.isBlank()) {
-            return null
-        }
-        for (event in p0) {
-            if (event.file?.path?.contains(tomlFilePath) == true) {
-                return PyProjectParser(event.file!!)
+        if (!tomlFilePath.isBlank()) {
+            for (event in p0) {
+                if (event.file?.path?.contains(tomlFilePath) == true) {
+                    return PyProjectParser(event.file!!)
+                }
             }
         }
         return null
