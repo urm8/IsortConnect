@@ -23,5 +23,4 @@ class PingDialog(private val isReachable: Boolean) : DialogWrapper(true) {
         panel.add(label, BorderLayout.CENTER)
         return panel
     }
-
 }

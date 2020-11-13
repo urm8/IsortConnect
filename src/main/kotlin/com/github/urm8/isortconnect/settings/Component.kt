@@ -44,17 +44,19 @@ class Component {
         }
 
     private val checkBtn = JButton("Check connection").apply {
-        this.addActionListener(ActionListener {
-            val isReachable = SorterService.ping()
-            com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
-        })
+        this.addActionListener(
+            ActionListener {
+                val isReachable = SorterService.ping()
+                com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
+            }
+        )
     }
 
     val panel = FormBuilder.createFormBuilder()
-            .addLabeledComponent(JBLabel("Server Url"), urlTextField, 1, true)
-            .addLabeledComponent(JBLabel("Trigger On Save"), triggerOnSaveButton, 2, false)
-            .addLabeledComponent(JBLabel("Check connection"), checkBtn, 3, false)
-            .addLabeledComponent(JBLabel("pyproject.toml"), loadPyProjectTomlButton, 4, false)
-            .addComponentFillVertically(JPanel(), 0)
-            .panel
+        .addLabeledComponent(JBLabel("Server Url"), urlTextField, 1, true)
+        .addLabeledComponent(JBLabel("Trigger On Save"), triggerOnSaveButton, 2, false)
+        .addLabeledComponent(JBLabel("Check connection"), checkBtn, 3, false)
+        .addLabeledComponent(JBLabel("pyproject.toml"), loadPyProjectTomlButton, 4, false)
+        .addComponentFillVertically(JPanel(), 0)
+        .panel
 }

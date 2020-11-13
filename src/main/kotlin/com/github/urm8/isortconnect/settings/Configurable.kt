@@ -9,9 +9,9 @@ class Configurable : com.intellij.openapi.options.Configurable {
     private lateinit var _component: Component
     override fun isModified(): Boolean {
         val settings = AppState.instance
-        return settings.url != _component.url
-                || settings.triggerOnSave != _component.triggerOnSave
-                || settings.pyprojectToml != _component.pyprojectToml
+        return settings.url != _component.url ||
+            settings.triggerOnSave != _component.triggerOnSave ||
+            settings.pyprojectToml != _component.pyprojectToml
     }
 
     override fun getDisplayName(): String {
@@ -43,5 +43,4 @@ class Configurable : com.intellij.openapi.options.Configurable {
         _component = Component()
         return _component.panel
     }
-
 }

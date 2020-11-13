@@ -8,11 +8,11 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import org.jetbrains.annotations.Nullable
 
 @State(
-        name = "com.github.urm8.isortconnect.settings.AppState",
-        storages = [Storage("iSortConnect.xml")]
+    name = "com.github.urm8.isortconnect.settings.AppState",
+    storages = [Storage("iSortConnect.xml")]
 )
-data class AppState(var url: String = DEFAULT_URL, var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE, var pyprojectToml: String = "", var pyprojectConf: Map<String, String>? = null)
-    : PersistentStateComponent<AppState> {
+data class AppState(var url: String = DEFAULT_URL, var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE, var pyprojectToml: String = "", var pyprojectConf: Map<String, String>? = null) :
+    PersistentStateComponent<AppState> {
     @Nullable
     override fun getState(): AppState = this
 
@@ -26,4 +26,3 @@ data class AppState(var url: String = DEFAULT_URL, var triggerOnSave: Boolean = 
         const val DEFAULT_TRIGGER_ON_SAVE = true
     }
 }
-

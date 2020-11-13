@@ -27,5 +27,4 @@ class RunImportSort : AnAction() {
         }
         sorterService.sort(document)
     }
-
 }

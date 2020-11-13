@@ -19,5 +19,4 @@ class PyprojectTomlFileListener : AsyncFileListener {
         }
         return null
     }
-
 }

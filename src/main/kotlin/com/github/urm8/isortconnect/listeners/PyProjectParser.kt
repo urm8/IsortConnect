@@ -9,9 +9,6 @@ import org.tomlj.TomlTable
 @Suppress("UNCHECKED_CAST")
 class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.ChangeApplier {
 
-    override fun beforeVfsChange() {
-    }
-
     override fun afterVfsChange() {
         val settings = AppState.instance
         settings.pyprojectConf = parse(tomlFile)

@@ -11,7 +11,6 @@ import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 
 class PyFileListener : AsyncFileListener {
 
-
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
         if (!AppState.instance.triggerOnSave) {
             return null
@@ -35,4 +34,3 @@ class PyFileListener : AsyncFileListener {
         }
     }
 }
-

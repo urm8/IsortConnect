@@ -32,14 +32,14 @@ class SorterService(private val project: @NotNull Project) {
         }
     }
 
-    private fun sortImports(document: @NotNull Document): Unit {
+    private fun sortImports(document: @NotNull Document) {
         val contents = document.text
         val request = HttpRequest.newBuilder()
-                .uri(uri)
-                .POST(HttpRequest.BodyPublishers.ofString(contents, Charset.forName("utf-8")))
-                .headers(*headers.toTypedArray())
-                .timeout(Duration.ofSeconds(5))
-                .build()
+            .uri(uri)
+            .POST(HttpRequest.BodyPublishers.ofString(contents, Charset.forName("utf-8")))
+            .headers(*headers.toTypedArray())
+            .timeout(Duration.ofSeconds(5))
+            .build()
         var sortedContents: String? = null
 
         val response = client.send(request, HttpResponse.BodyHandlers.ofString())
@@ -66,7 +66,7 @@ class SorterService(private val project: @NotNull Project) {
                 }
                 var url = settings.url
                 if (!url.startsWith("http://") || !url.startsWith("https://")) {
-                    url = "http://${url}"
+                    url = "http://$url"
                 }
                 return URI.create(url)
             }
@@ -84,10 +84,10 @@ class SorterService(private val project: @NotNull Project) {
         fun ping(): Boolean {
             val serverUrl = uri.resolve("/ping")
             val request = HttpRequest.newBuilder()
-                    .uri(serverUrl)
-                    .timeout(Duration.ofSeconds(1))
-                    .GET()
-                    .build()
+                .uri(serverUrl)
+                .timeout(Duration.ofSeconds(1))
+                .GET()
+                .build()
 
             return try {
                 val response = client.send(request, HttpResponse.BodyHandlers.ofString())
@@ -97,6 +97,5 @@ class SorterService(private val project: @NotNull Project) {
                 false
             }
         }
-
     }
 }
