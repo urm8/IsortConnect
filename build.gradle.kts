@@ -43,7 +43,6 @@ repositories {
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
     implementation("org.tomlj:tomlj:1.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -95,24 +94,24 @@ tasks {
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription(
-            closure {
-                File("./README.md").readText().lines().run {
-                    val start = "<!-- Plugin description -->"
-                    val end = "<!-- Plugin description end -->"
+                closure {
+                    File("./README.md").readText().lines().run {
+                        val start = "<!-- Plugin description -->"
+                        val end = "<!-- Plugin description end -->"
 
-                    if (!containsAll(listOf(start, end))) {
-                        throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-                    }
-                    subList(indexOf(start) + 1, indexOf(end))
-                }.joinToString("\n").run { markdownToHTML(this) }
-            }
+                        if (!containsAll(listOf(start, end))) {
+                            throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+                        }
+                        subList(indexOf(start) + 1, indexOf(end))
+                    }.joinToString("\n").run { markdownToHTML(this) }
+                }
         )
 
         // Get the latest available change notes from the changelog file
         changeNotes(
-            closure {
-                changelog.getLatest().toHTML()
-            }
+                closure {
+                    changelog.getLatest().toHTML()
+                }
         )
     }
 

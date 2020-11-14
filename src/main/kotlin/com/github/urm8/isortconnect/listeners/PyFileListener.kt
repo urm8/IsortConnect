@@ -14,9 +14,12 @@ class PyFileListener : AsyncFileListener {
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
         if (AppState.instance.triggerOnSave) {
             val locator = ProjectLocator.getInstance()
-            for (event in events.filter { event -> event.file?.extension?.equals("py", ignoreCase = true) ?: false }) {
-                val file = event.file!!
-                val project = locator.guessProjectForFile(file)
+            for (event in events) {
+                val file = event.file
+                if (file == null || file.extension != PY_EXT) {
+                    continue
+                }
+                val project = locator.guessProjectForFile(event.file)
                 if (project != null) {
                     return PyFileApplier(file, project)
                 }
@@ -31,5 +34,9 @@ class PyFileListener : AsyncFileListener {
             val sorter = proj.service<SorterService>()
             sorter.sort(vf)
         }
+    }
+
+    companion object {
+        const val PY_EXT: String = "py"
     }
 }

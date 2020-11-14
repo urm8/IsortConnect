@@ -6,13 +6,14 @@ import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 
 class PyprojectTomlFileListener : AsyncFileListener {
 
-    override fun prepareChange(p0: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
+    override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
         val currentSettings = AppState.instance
         val tomlFilePath = currentSettings.pyprojectToml
         if (!tomlFilePath.isBlank()) {
-            for (event in p0) {
-                if (event.file?.path?.contains(tomlFilePath) == true) {
-                    return PyProjectParser(event.file!!)
+            for (event in events) {
+                val file = event.file
+                if (file != null && file.path.contains(tomlFilePath)) {
+                    return PyProjectParser(file)
                 }
             }
         }
