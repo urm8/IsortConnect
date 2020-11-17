@@ -4,6 +4,7 @@ import com.github.urm8.isortconnect.settings.AppState
 import com.intellij.openapi.vfs.AsyncFileListener
 import com.intellij.openapi.vfs.VirtualFile
 import org.tomlj.Toml
+import org.tomlj.TomlArray
 import org.tomlj.TomlTable
 
 @Suppress("UNCHECKED_CAST")
@@ -22,7 +23,14 @@ class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.Cha
             if (isortConfig?.isEmpty != false) {
                 return mapOf()
             }
-            return isortConfig.toMap().map { entry -> entry.key to entry.value.toString() }.toMap()
+            val cfg = isortConfig.toMap().map { entry ->
+                entry.key to if (entry.value is TomlArray) {
+                    (entry.value as TomlArray).toList().joinToString(",") { elem -> elem.toString() }
+                } else {
+                    entry.value.toString()
+                }
+            }.toMap()
+            return cfg
         }
     }
 }
