@@ -32,6 +32,12 @@ val platformVersion: String by project
 val platformPlugins: String by project
 val platformDownloadSources: String by project
 
+val analysisDir = file(projectDir)
+
+val kotlinFiles = "**/*.kt"
+val kotlinScriptFiles = "**/*.kts"
+val resourceFiles = "**/resources/**"
+val buildFiles = "**/build/**"
 group = pluginGroup
 version = pluginVersion
 
@@ -63,10 +69,30 @@ detekt {
     autoCorrect = true
     config = files("./detekt-config.yml")
     buildUponDefaultConfig = true
+    input.plus(objects.fileCollection().from("build.gradle.kts"))
 
     reports {
         html.enabled = false
         xml.enabled = false
+        txt.enabled = false
+    }
+}
+
+val detektFormat by tasks.registering(Detekt::class) {
+    description = "Formats whole project."
+    parallel = true
+    disableDefaultRuleSets = true
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    setSource(analysisDir)
+    config.setFrom(files("./detekt-config.yml"))
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    reports {
+        xml.enabled = false
+        html.enabled = false
         txt.enabled = false
     }
 }
@@ -94,24 +120,24 @@ tasks {
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         pluginDescription(
-                closure {
-                    File("./README.md").readText().lines().run {
-                        val start = "<!-- Plugin description -->"
-                        val end = "<!-- Plugin description end -->"
+            closure {
+                File("./README.md").readText().lines().run {
+                    val start = "<!-- Plugin description -->"
+                    val end = "<!-- Plugin description end -->"
 
-                        if (!containsAll(listOf(start, end))) {
-                            throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-                        }
-                        subList(indexOf(start) + 1, indexOf(end))
-                    }.joinToString("\n").run { markdownToHTML(this) }
-                }
+                    if (!containsAll(listOf(start, end))) {
+                        throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
+                    }
+                    subList(indexOf(start) + 1, indexOf(end))
+                }.joinToString("\n").run { markdownToHTML(this) }
+            }
         )
 
         // Get the latest available change notes from the changelog file
         changeNotes(
-                closure {
-                    changelog.getLatest().toHTML()
-                }
+            closure {
+                changelog.getLatest().toHTML()
+            }
         )
     }
 

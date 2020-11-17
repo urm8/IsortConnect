@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable
     storages = [Storage("iSortConnect.xml")]
 )
 data class AppState(
-        var url: String = DEFAULT_URL,
-        var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
-        var pyprojectToml: String = "",
-        var pyprojectConf: Map<String, String>? = null
+    var url: String = DEFAULT_URL,
+    var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
+    var pyprojectToml: String = "",
+    var pyprojectConf: Map<String, String>? = null
 ) :
     PersistentStateComponent<AppState> {
     @Nullable

@@ -3,6 +3,7 @@
 
 formatting:
   Indentation:
-    continuationIndentSize: 8
+    indentSize: 2
+    continuationIndentSize: 4
   ParameterListWrapping:
-    indentSize: 8
+    indentSize: 4
