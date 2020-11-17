@@ -11,7 +11,14 @@
     <!-- Text to display as description on Preferences/Settings | Plugin page -->
     <description>
         <![CDATA[
-      Demonstrates how to configure a plugin project for a PyCharm plugin.
+    This plugin uses isortd to sort your imports, reusing your project's pyproject.toml config.
+    Connect to isortd and format your Python code without overhead of starting a new isort process on each file save/commit
+    by making http call to running isort daemon
+
+    Features supported:
+    - import pyproject.toml
+    - format on save
+    - format on action trigger
     ]]>
     </description>
     <change-notes>
