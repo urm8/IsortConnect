@@ -1,7 +1,7 @@
 package com.github.urm8.isortconnect.actions
 
 import com.github.urm8.isortconnect.service.SorterService
-import com.github.urm8.isortconnect.settings.AppState
+import com.github.urm8.isortconnect.settings.IsortConnectService
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -9,7 +9,7 @@ import com.intellij.openapi.components.service
 import com.jetbrains.python.psi.PyFile
 
 class RunImportSort : AnAction() {
-    private val logger = com.intellij.openapi.diagnostic.Logger.getInstance(AppState::class.java)
+    private val logger = com.intellij.openapi.diagnostic.Logger.getInstance(IsortConnectService::class.java)
 
     override fun update(e: AnActionEvent) {
         super.update(e)

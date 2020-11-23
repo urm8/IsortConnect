@@ -1,6 +1,6 @@
 package com.github.urm8.isortconnect.service
 
-import com.github.urm8.isortconnect.settings.AppState
+import com.github.urm8.isortconnect.settings.IsortConnectService
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
@@ -44,7 +44,7 @@ class SorterService(private val project: @NotNull Project) {
                             (it.value as Collection<*>).joinToString(separator = ",") { elem -> elem.toString() }
                         } else {
                             it.value.toString()
-                        }
+                        }.apply { this.trim() }
                         val key = "X-${it.key.toUpperCase()}"
                         setRequestProperty(key, value)
                     }
@@ -75,13 +75,13 @@ class SorterService(private val project: @NotNull Project) {
 
     companion object {
         const val defaultTimeOutSeconds: Long = 1
-        private val settings: AppState
-            get() = AppState.instance
+        private val settings: IsortConnectService.State
+            get() = IsortConnectService.instance
 
         val uri: URI
             get() {
                 if (settings.url.isBlank()) {
-                    return URI.create("http://${AppState.DEFAULT_URL}")
+                    return URI.create("http://${IsortConnectService.DEFAULT_URL}")
                 }
                 var url = settings.url
                 if (!url.startsWith("http://") || !url.startsWith("https://")) {

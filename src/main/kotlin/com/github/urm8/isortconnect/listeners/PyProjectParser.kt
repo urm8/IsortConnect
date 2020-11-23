@@ -1,6 +1,6 @@
 package com.github.urm8.isortconnect.listeners
 
-import com.github.urm8.isortconnect.settings.AppState
+import com.github.urm8.isortconnect.settings.IsortConnectService
 import com.intellij.openapi.vfs.AsyncFileListener
 import com.intellij.openapi.vfs.VirtualFile
 import org.tomlj.Toml
@@ -11,7 +11,7 @@ import org.tomlj.TomlTable
 class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.ChangeApplier {
 
     override fun afterVfsChange() {
-        val settings = AppState.instance
+        val settings = IsortConnectService.instance
         settings.pyprojectConf = parse(tomlFile)
     }
 

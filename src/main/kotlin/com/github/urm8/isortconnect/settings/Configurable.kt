@@ -8,7 +8,7 @@ class Configurable : com.intellij.openapi.options.Configurable {
 
     private lateinit var _component: Component
     override fun isModified(): Boolean {
-        val settings = AppState.instance
+        val settings = IsortConnectService.instance
         return settings.url != _component.url ||
             settings.triggerOnSave != _component.triggerOnSave ||
             settings.pyprojectToml != _component.pyprojectToml
@@ -23,7 +23,7 @@ class Configurable : com.intellij.openapi.options.Configurable {
     }
 
     override fun apply() {
-        val state = AppState.instance
+        val state = IsortConnectService.instance
         state.url = _component.url
         state.triggerOnSave = _component.triggerOnSave
         state.pyprojectToml = _component.pyprojectToml
@@ -33,7 +33,7 @@ class Configurable : com.intellij.openapi.options.Configurable {
     }
 
     override fun reset() {
-        val settings = AppState.instance
+        val settings = IsortConnectService.instance
         _component.url = settings.url
         _component.triggerOnSave = settings.triggerOnSave
         _component.pyprojectToml = settings.pyprojectToml
