@@ -19,22 +19,22 @@ class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.Cha
     }
 
     companion object {
+        const val TIMEOUT = 2000
         @JvmStatic
         fun parse(tomlFile: VirtualFile): Map<String, String> {
-            val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(2000)
+            val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(TIMEOUT)
             val project = dataContext?.getData(CommonDataKeys.PROJECT) ?: return mapOf()
 
             val cfg = mutableMapOf<String, String>()
             val psi = PsiManager.getInstance(project).findFile(tomlFile)
             if (psi != null && psi.fileType == TomlFileType && psi is TomlFile) {
-                for (elem in psi.findChildrenByClass(TomlTable::class.java)) {
-                    if (elem.header.textMatches("[tool.isort]")) {
-                        for (entry in elem.entries.filter { e -> e.value != null }) {
-                            if (!entry.value?.text.isNullOrBlank()) {
-                                cfg[entry.key.text] = entry.value!!.text
-                            }
-                        }
-                    }
+                for (
+                    entry in psi.findChildrenByClass(TomlTable::class.java)
+                        .filter { elem -> elem.header.textMatches("[tool.isort]") }
+                        .flatMap { elem -> elem.entries }
+                        .filterNot { elem -> elem.value?.text.isNullOrBlank() }
+                ) {
+                    cfg[entry.key.text] = entry.value!!.text
                 }
             }
             return cfg

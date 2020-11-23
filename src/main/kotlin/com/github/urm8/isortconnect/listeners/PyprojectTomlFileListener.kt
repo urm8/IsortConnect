@@ -12,7 +12,7 @@ class PyprojectTomlFileListener : AsyncFileListener {
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
         val currentSettings = IsortConnectService.instance
         val tomlFilePath = currentSettings.pyprojectToml
-        val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(2000)
+        val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(TIMEOUT)
         val project = dataContext?.getData(CommonDataKeys.PROJECT)
         if (!tomlFilePath.isBlank() && project != null) {
             for (file in events.mapNotNull { event -> event.file }.filter { file -> file.fileType == TomlFileType }) {
@@ -20,5 +20,9 @@ class PyprojectTomlFileListener : AsyncFileListener {
             }
         }
         return null
+    }
+
+    companion object {
+        const val TIMEOUT = 2000
     }
 }

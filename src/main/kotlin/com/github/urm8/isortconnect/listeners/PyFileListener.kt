@@ -10,21 +10,22 @@ import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.AsyncFileListener
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
+import com.jetbrains.python.PythonFileType
 
 class PyFileListener : AsyncFileListener {
 
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
-        val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(2000)
+        val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(TIMEOUT)
         val project = dataContext?.getData(PROJECT)
         if (project != null) {
             val index = ProjectRootManager.getInstance(project).fileIndex
             val service = project.service<IsortConnectService>()
             if (service.state.triggerOnSave) {
-                for (event in events) {
-                    val file = event.file
-                    if (file == null || file.extension != PY_EXT || !index.isInSource(file)) {
-                        continue
-                    }
+                for (
+                    file in events
+                        .mapNotNull { event -> event.file }
+                        .filter { file -> file.fileType != PythonFileType.INSTANCE || !index.isInSource(file) }
+                ) {
                     return PyFileApplier(file, project)
                 }
             }
@@ -42,5 +43,6 @@ class PyFileListener : AsyncFileListener {
 
     companion object {
         const val PY_EXT: String = "py"
+        const val TIMEOUT = 2000
     }
 }
