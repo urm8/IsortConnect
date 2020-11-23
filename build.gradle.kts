@@ -45,10 +45,11 @@ version = pluginVersion
 repositories {
     mavenCentral()
     jcenter()
+    maven("https://www.jetbrains.com/intellij-repository/releases")
+    maven("https://jetbrains.bintray.com/intellij-third-party-dependencies")
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
-    implementation("org.tomlj:tomlj:1.0.0")
 }
 
 // Configure gradle-intellij-plugin plugin.

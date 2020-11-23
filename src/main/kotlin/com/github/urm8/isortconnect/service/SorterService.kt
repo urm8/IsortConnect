@@ -62,6 +62,7 @@ class SorterService(private val project: @NotNull Project) {
                         body
                     } catch (e: IOException) {
                         logger.warn("failed to connect", e)
+
                         return@launch
                     }
                 }
