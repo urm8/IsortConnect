@@ -1,6 +1,7 @@
 package com.github.urm8.isortconnect.settings
 
 import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.RoamingType
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
@@ -8,11 +9,12 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import org.jetbrains.annotations.Nullable
 
 @State(
-        name = "com.github.urm8.isortconnect.settings.AppState",
-        storages = [Storage("iSortConnect.xml")]
+    name = "com.github.urm8.isortconnect.settings.AppState",
+    storages = [Storage(value = "iSortConnect.xml", roamingType = RoamingType.DISABLED)],
+
 )
 class IsortConnectService(private val project: Project) :
-        PersistentStateComponent<IsortConnectService.State> {
+    PersistentStateComponent<IsortConnectService.State> {
 
     @Nullable
     override fun getState(): State = instance
@@ -22,10 +24,10 @@ class IsortConnectService(private val project: Project) :
     }
 
     data class State(
-            var url: String = DEFAULT_URL,
-            var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
-            var pyprojectToml: String = "",
-            var pyprojectConf: Map<String, String>? = null
+        var url: String = DEFAULT_URL,
+        var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
+        var pyprojectToml: String = "",
+        var pyprojectConf: Map<String, String>? = null
     )
 
     companion object {
