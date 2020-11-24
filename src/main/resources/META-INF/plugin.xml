@@ -30,6 +30,7 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="com.github.urm8.isortconnect.settings.IsortConnectService"/>
         <projectConfigurable
                 parentId="tools"
                 id="com.github.urm8.isortconnect.settings.Configurable"
@@ -39,8 +40,6 @@
                            id="com.github.urm8.isortconnect.listeners.PyprojectTomlFileListener"/>
         <vfs.asyncListener implementation="com.github.urm8.isortconnect.listeners.PyFileListener"
                            id="com.github.urm8.isortconnect.listeners.PyFileListener"/>
-
-        <projectService serviceImplementation="com.github.urm8.isortconnect.settings.IsortConnectService"/>
     </extensions>
     <actions>
         <action id="com.github.urm8.isortconnect.actions.RunImportSort"

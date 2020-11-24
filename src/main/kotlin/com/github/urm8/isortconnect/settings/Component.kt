@@ -8,6 +8,9 @@ import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.FormBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -44,8 +47,10 @@ class Component {
 
     private val checkBtn = JButton("Check connection").apply {
         this.addActionListener {
-            val isReachable = SorterService.ping()
-            com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
+            GlobalScope.launch(Dispatchers.IO) {
+                val isReachable = SorterService.ping()
+                com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
+            }
         }
     }
 

@@ -10,7 +10,6 @@ import org.toml.lang.psi.TomlFile
 import org.toml.lang.psi.TomlFileType
 import org.toml.lang.psi.TomlTable
 
-@Suppress("UNCHECKED_CAST")
 class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.ChangeApplier {
 
     override fun afterVfsChange() {
@@ -19,7 +18,8 @@ class PyProjectParser(private val tomlFile: VirtualFile) : AsyncFileListener.Cha
     }
 
     companion object {
-        const val TIMEOUT = 2000
+        const val TIMEOUT = 500
+
         @JvmStatic
         fun parse(tomlFile: VirtualFile): Map<String, String> {
             val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(TIMEOUT)

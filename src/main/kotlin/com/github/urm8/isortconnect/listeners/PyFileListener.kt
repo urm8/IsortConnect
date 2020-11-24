@@ -2,10 +2,9 @@ package com.github.urm8.isortconnect.listeners
 
 import com.github.urm8.isortconnect.service.SorterService
 import com.github.urm8.isortconnect.settings.IsortConnectService
-import com.intellij.ide.DataManager
-import com.intellij.openapi.actionSystem.CommonDataKeys.PROJECT
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.AsyncFileListener
 import com.intellij.openapi.vfs.VirtualFile
@@ -15,18 +14,25 @@ import com.jetbrains.python.PythonFileType
 class PyFileListener : AsyncFileListener {
 
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
-        val dataContext = DataManager.getInstance().dataContextFromFocusAsync.blockingGet(TIMEOUT)
-        val project = dataContext?.getData(PROJECT)
-        if (project != null) {
-            val index = ProjectRootManager.getInstance(project).fileIndex
-            val service = project.service<IsortConnectService>()
-            if (service.state.triggerOnSave) {
-                for (
-                    file in events
-                        .mapNotNull { event -> event.file }
-                        .filter { file -> file.fileType != PythonFileType.INSTANCE || !index.isInSource(file) }
+        val locator = ProjectLocator.getInstance()
+        for (
+            file in events
+                .mapNotNull { event -> event.file }
+                .filter { file -> file.fileType == PythonFileType.INSTANCE }
+        ) {
+            return locator.guessProjectForFile(file)?.run {
+                return if (ProjectRootManager
+                    .getInstance(this)
+                    .fileIndex.run {
+                        this.isInSource(file) ||
+                            this.isInContent(file) ||
+                            this.isInSourceContent(file)
+                    } &&
+                    this.service<IsortConnectService>().state.triggerOnSave
                 ) {
-                    return PyFileApplier(file, project)
+                    PyFileApplier(file, this)
+                } else {
+                    null
                 }
             }
         }
@@ -43,6 +49,6 @@ class PyFileListener : AsyncFileListener {
 
     companion object {
         const val PY_EXT: String = "py"
-        const val TIMEOUT = 2000
+        const val TIMEOUT = 500
     }
 }
