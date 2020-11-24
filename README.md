@@ -15,11 +15,14 @@
 - [x] Use jetbrains default toml engine
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+This plugin uses [isortd](https://github.com/urm8/isortd) to sort your imports, reusing your project's pyproject.toml config.
+Connect to isortd and format your Python code without overhead of starting a new isort process on each file save/commit
+by making http call to running isort daemon
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
-
-To keep everything working, do not remove `<!-- ... -->` sections. 
+Features supported:
+- import pyproject.toml
+- format on save
+- format on action trigger
 <!-- Plugin description end -->
 
 ## Installation
