@@ -1,6 +1,9 @@
 package com.github.urm8.isortconnect.settings
 
+import com.github.urm8.isortconnect.dialogs.PingDialog
 import com.github.urm8.isortconnect.service.SorterService
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
@@ -49,7 +52,12 @@ class Component {
         this.addActionListener {
             GlobalScope.launch(Dispatchers.IO) {
                 val isReachable = SorterService.ping()
-                com.github.urm8.isortconnect.dialogs.PingDialog(isReachable).showAndGet()
+                ApplicationManager.getApplication().invokeLater(
+                    {
+                        PingDialog(isReachable).showAndGet()
+                    },
+                    ModalityState.any()
+                )
             }
         }
     }
