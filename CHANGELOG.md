@@ -2,6 +2,10 @@
 
 # IsortConnect Changelog
 
-## [Unreleased]
+## [0.0.1] - 2020-11-25
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- initial release
+- config
+- listen to pyproject.toml changes
+- listen to *.py file changes
+- format imports action
