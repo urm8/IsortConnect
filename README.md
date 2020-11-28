@@ -1,8 +1,8 @@
 # IsortConnect
 
 ![Build](https://github.com/urm8/IsortConnect/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/com.github.urm8.isortconnect)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/com.github.urm8.isortconnect)
+[![Version](https://img.shields.io/jetbrains/plugin/v/com.github.urm8.isortconnect.svg)](https://plugins.jetbrains.com/plugin/com.github.urm8.isortconnect)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/com.github.urm8.isortconnect.svg)](https://plugins.jetbrains.com/plugin/com.github.urm8.isortconnect)
 
 ## ToDo list
 - [x] Create a new [IntelliJ Platform Plugin Template][template] project.

@@ -1,6 +1,21 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # IsortConnect Changelog
+## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.0.3]
+### Added
+- config token
 
 ## [0.0.2] - 2020-11-25
 ### Fixed
