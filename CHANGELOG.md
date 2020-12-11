@@ -1,7 +1,7 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # IsortConnect Changelog
-## [Unreleased]
+## [0.0.4]
 ### Added
 - migrate to pycharm 2020.3
 ### Fixed
