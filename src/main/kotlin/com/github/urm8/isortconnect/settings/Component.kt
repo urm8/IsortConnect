@@ -56,7 +56,7 @@ class Component {
                     {
                         PingDialog(isReachable).showAndGet()
                     },
-                    ModalityState.any()
+                    ModalityState.stateForComponent(rootPane)
                 )
             }
         }

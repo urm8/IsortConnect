@@ -16,6 +16,11 @@
 ## [0.0.3]
 ### Added
 - config token
+## [0.0.4]
+### Added
+- migrate to pycharm 2020.3
+### Fixed
+- ping dialog modal now invoked with modality state targeting settings pane
 
 ## [0.0.2] - 2020-11-25
 ### Fixed
