@@ -14,6 +14,11 @@
 
 ### Security
 
+## [0.0.7] - 2020-02-04 
+
+### Added
+- handle external changes
+
 ## [0.0.6] - 2020-02-03
 
 ### Added
