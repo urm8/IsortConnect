@@ -14,6 +14,11 @@
 
 ### Security
 
+## [0.0.6] - 2020-02-03
+
+### Added
+- sort imports on move events
+
 ## [0.0.5] - 2020-01-25
 
 ### Fixed
