@@ -19,7 +19,6 @@ class PyFileListener : AsyncFileListener {
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
         locator = ProjectLocator.getInstance()
         rootManagers = mutableMapOf()
-
         val filesToVisit = events.mapNotNull { event -> checkEvent(event = event) }
         if (filesToVisit.isNotEmpty()) {
             return PyFileApplier(filesToVisit)
@@ -29,7 +28,7 @@ class PyFileListener : AsyncFileListener {
 
     private fun checkEvent(event: VFileEvent): PyFileWithService? {
         if (event.file?.fileType == PythonFileType.INSTANCE && (
-            isFileChangedByUserActions(event) || isFileNameChangeEvent(event)
+            isFileChangedByUserActions(event) || isFileNameChangeEvent(event) || isFileRefreshedAndChanged(event)
             )
         ) {
             val file = event.file!!
@@ -49,6 +48,9 @@ class PyFileListener : AsyncFileListener {
         }
         return null
     }
+
+    private fun isFileRefreshedAndChanged(event: VFileEvent) =
+        (event.isFromRefresh && event is VFileContentChangeEvent)
 
     private fun isFileChangedByUserActions(event: VFileEvent) =
         event.isFromSave && event is VFileContentChangeEvent
