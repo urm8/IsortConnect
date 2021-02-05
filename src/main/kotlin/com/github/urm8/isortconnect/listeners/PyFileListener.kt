@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.AsyncFileListener
+import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import com.jetbrains.python.PythonFileType
 
@@ -43,7 +44,8 @@ class PyFileListener : AsyncFileListener {
 
     private fun isFileModifiedAndWritable(event: VFileEvent): Boolean {
         val file = event.file!!
-        return fileDocumentManager.isFileModified(file) && fileDocumentManager.getDocument(file)?.isWritable ?: false
+        return (fileDocumentManager.isFileModified(file) || (event is VFileContentChangeEvent && event.isFromRefresh)) &&
+            fileDocumentManager.getDocument(file)?.isWritable == true
     }
 
     private fun isPythonFile(event: VFileEvent) =

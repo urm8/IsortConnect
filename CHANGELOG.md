@@ -14,6 +14,10 @@
 
 ### Security
 
+## [0.0.9] - 2020-02-05
+### Fixed
+- check refreshes
+
 ## [0.0.8] - 2020-02-05
 ### Changed
 
