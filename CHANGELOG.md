@@ -2,17 +2,10 @@
 
 # IsortConnect Changelog
 ## [Unreleased]
-### Added
-
 ### Changed
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- changed check for changes
+- check if file is writable in listener
 
 ## [0.0.7] - 2020-02-04 
 
