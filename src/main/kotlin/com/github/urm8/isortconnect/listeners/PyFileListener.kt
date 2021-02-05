@@ -3,22 +3,17 @@ package com.github.urm8.isortconnect.listeners
 import com.github.urm8.isortconnect.service.SorterService
 import com.github.urm8.isortconnect.settings.IsortConnectService
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectLocator
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.AsyncFileListener
-import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
-import com.intellij.openapi.vfs.newvfs.events.VFilePropertyChangeEvent
 import com.jetbrains.python.PythonFileType
 
 class PyFileListener : AsyncFileListener {
-    private lateinit var locator: ProjectLocator
-    private lateinit var rootManagers: MutableMap<Project, ProjectRootManager>
 
     override fun prepareChange(events: MutableList<out VFileEvent>): AsyncFileListener.ChangeApplier? {
-        locator = ProjectLocator.getInstance()
-        rootManagers = mutableMapOf()
         val filesToVisit = events.mapNotNull { event -> checkEvent(event = event) }
         if (filesToVisit.isNotEmpty()) {
             return PyFileApplier(filesToVisit)
@@ -27,10 +22,7 @@ class PyFileListener : AsyncFileListener {
     }
 
     private fun checkEvent(event: VFileEvent): PyFileWithService? {
-        if (event.file?.fileType == PythonFileType.INSTANCE && (
-            isFileChangedByUserActions(event) || isFileNameChangeEvent(event) || isFileRefreshedAndChanged(event)
-            )
-        ) {
+        if (isPythonFile(event) && isFileModifiedAndWritable(event)) {
             val file = event.file!!
             return locator.guessProjectForFile(file)?.run {
                 val project = this
@@ -49,19 +41,24 @@ class PyFileListener : AsyncFileListener {
         return null
     }
 
-    private fun isFileRefreshedAndChanged(event: VFileEvent) =
-        (event.isFromRefresh && event is VFileContentChangeEvent)
+    private fun isFileModifiedAndWritable(event: VFileEvent): Boolean {
+        val file = event.file!!
+        return fileDocumentManager.isFileModified(file) && fileDocumentManager.getDocument(file)?.isWritable ?: false
+    }
 
-    private fun isFileChangedByUserActions(event: VFileEvent) =
-        event.isFromSave && event is VFileContentChangeEvent
+    private fun isPythonFile(event: VFileEvent) =
+        event.file?.fileType == PythonFileType.INSTANCE
 
-    private fun isFileNameChangeEvent(event: VFileEvent) =
-        event is VFilePropertyChangeEvent && event.isRename
-
-    class PyFileApplier(val toSort: Collection<PyFileWithService>) : AsyncFileListener.ChangeApplier {
+    class PyFileApplier(private val toSort: Collection<PyFileWithService>) : AsyncFileListener.ChangeApplier {
         override fun beforeVfsChange() {
             super.beforeVfsChange()
             toSort.forEach { pyFile -> pyFile.service.sort(pyFile.file) }
         }
+    }
+
+    companion object {
+        private val locator: ProjectLocator = ProjectLocator.getInstance()
+        private val rootManagers: MutableMap<Project, ProjectRootManager> = mutableMapOf()
+        private val fileDocumentManager: FileDocumentManager = FileDocumentManager.getInstance()
     }
 }
