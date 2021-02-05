@@ -2,6 +2,19 @@
 
 # IsortConnect Changelog
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.0.8] - 2020-02-05
 ### Changed
 
 - changed check for changes
