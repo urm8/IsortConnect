@@ -14,6 +14,12 @@
 
 ### Security
 
+## [Unreleased]
+
+### Added
+
+- Migrate to PyCharm 2021.1
+
 ## [0.0.9] - 2020-02-05
 ### Fixed
 - check refreshes
