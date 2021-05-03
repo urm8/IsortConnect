@@ -7,6 +7,7 @@ import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.ui.components.JBBox
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextField
@@ -20,54 +21,94 @@ import javax.swing.JPanel
 
 class Component {
     fun getPreferredFocusedComponent(): JComponent = urlTextField
-    private val urlTextField = JBTextField()
-    private val triggerOnSaveButton = JBCheckBox("Trigger on save ?")
-    private val pyprojectTomlTextField = JBTextField()
-    private val loadPyProjectTomlButton = TextFieldWithBrowseButton(pyprojectTomlTextField) {
+    private val urlTextField = JBTextField().apply {
+        this.emptyText.text = "e.g. localhost:47393"
+    }
+    private val urlLabel = JBLabel("URI of \"isortd\" service:")
+    private val urlBox = JBBox.createHorizontalBox().apply {
+        this.add(urlTextField)
+        this.add(JButton("Check connection").apply {
+            this.addActionListener {
+                GlobalScope.launch(Dispatchers.IO) {
+                    val isReachable = SorterService.ping()
+                    ApplicationManager.getApplication().invokeLater(
+                            {
+                                PingDialog(isReachable).showAndGet()
+                            },
+                            ModalityState.stateForComponent(rootPane)
+                    )
+                }
+            }
+        }
+        )
+    }
+
+    private val pyprojectURITextField = JBTextField()
+    private val pyprojectURILabel = JBLabel("Path to \"pyproject.toml\":")
+    private val loadPyprojectButton = TextFieldWithBrowseButton(pyprojectURITextField) {
         val descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor("toml")
         val file = FileChooser.chooseFile(descriptor, null, null) ?: return@TextFieldWithBrowseButton
         if (file.name == "pyproject.toml") {
-            pyprojectTomlTextField.text = file.path
+            pyprojectURITextField.text = file.path
         }
     }
 
-    var url: String
+    private val triggerOnSaveCheckBox = JBCheckBox().apply {
+        this.text = "Trigger on save"
+    }
+    private val triggerOptimizeImportsCheckBox = JBCheckBox().apply {
+        this.text = "Optimize imports before sort"
+    }
+    private val showNotificationsCheckBox = JBCheckBox().apply {
+        this.text = "Show notifications"
+    }
+    private val useCompressionCheckBox = JBCheckBox().apply {
+        this.text = "Use compression in requests"
+        this.isEnabled = false
+    }
+
+    var isortdURI: String
         get() = urlTextField.text
         set(value) {
             urlTextField.text = value
         }
-    var triggerOnSave: Boolean
-        get() = triggerOnSaveButton.isSelected
-        set(value) {
-            triggerOnSaveButton.isSelected = value
-        }
-
     var pyprojectToml: String
-        get() = pyprojectTomlTextField.text
+        get() = pyprojectURITextField.text
         set(value) {
-            pyprojectTomlTextField.text = value
+            pyprojectURITextField.text = value
+        }
+    var triggerOnSave: Boolean
+        get() = triggerOnSaveCheckBox.isSelected
+        set(value) {
+            triggerOnSaveCheckBox.isSelected = value
         }
 
-    private val checkBtn = JButton("Check connection").apply {
-        this.addActionListener {
-            GlobalScope.launch(Dispatchers.IO) {
-                val isReachable = SorterService.ping()
-                ApplicationManager.getApplication().invokeLater(
-                    {
-                        PingDialog(isReachable).showAndGet()
-                    },
-                    ModalityState.stateForComponent(rootPane)
-                )
-            }
+    var optimizeImports: Boolean
+        get() = triggerOptimizeImportsCheckBox.isSelected
+        set(value) {
+            triggerOptimizeImportsCheckBox.isSelected = value
         }
-    }
 
-    var topInset = 0
-    val panel = FormBuilder.createFormBuilder()
-        .addLabeledComponent(JBLabel("Server Url"), urlTextField, ++topInset, true)
-        .addLabeledComponent(JBLabel("Trigger On Save"), triggerOnSaveButton, ++topInset, false)
-        .addLabeledComponent(JBLabel("Check connection"), checkBtn, ++topInset, false)
-        .addLabeledComponent(JBLabel("pyproject.toml"), loadPyProjectTomlButton, ++topInset, false)
-        .addComponentFillVertically(JPanel(), 0)
-        .panel
+    var useCompression: Boolean
+        get() = useCompressionCheckBox.isSelected
+        set(value) {
+            useCompressionCheckBox.isSelected = value
+        }
+
+    var showNotifications: Boolean
+        get() = showNotificationsCheckBox.isSelected
+        set(value) {
+            showNotificationsCheckBox.isSelected = value
+        }
+
+    val panel: JPanel = FormBuilder.createFormBuilder().apply {
+        this.addLabeledComponent(urlLabel, urlBox)
+        this.addLabeledComponent(pyprojectURILabel, loadPyprojectButton)
+        this.addComponent(triggerOnSaveCheckBox)
+        this.addComponent(triggerOptimizeImportsCheckBox)
+        this.addComponent(showNotificationsCheckBox)
+        this.addComponent(useCompressionCheckBox)
+        this.addComponentFillVertically(JPanel(), this.lineCount)
+    }.panel
+
 }

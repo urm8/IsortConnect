@@ -9,12 +9,13 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import org.jetbrains.annotations.Nullable
 
 @State(
-    name = "com.github.urm8.isortconnect.settings.AppState",
-    storages = [Storage(value = "iSortConnect.xml", roamingType = RoamingType.DISABLED)],
+        name = "com.github.urm8.isortconnect.settings.AppState",
+        storages = [Storage(value = "iSortConnect.xml", roamingType = RoamingType.DISABLED)],
 
-)
+        )
 class IsortConnectService(private val project: Project) :
-    PersistentStateComponent<IsortConnectService.State> {
+        PersistentStateComponent<IsortConnectService.State> {
+
 
     @Nullable
     override fun getState(): State = instance
@@ -24,15 +25,21 @@ class IsortConnectService(private val project: Project) :
     }
 
     data class State(
-        var url: String = DEFAULT_URL,
-        var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
-        var pyprojectToml: String = "",
-        var pyprojectConf: Map<String, String>? = null
+            var url: String = DEFAULT_URL,
+            var triggerOnSave: Boolean = DEFAULT_TRIGGER_ON_SAVE,
+            var pyprojectToml: String = "",
+            var pyprojectConf: Map<String, String>? = null,
+            var useCompression: Boolean = DEFAULT_USE_COMPRESSION,
+            var optimizeImports: Boolean = DEFAULT_OPTIMIZE_IMPORTS,
+            var showNotifications: Boolean = DEFAULT_SHOW_NOTIFICATIONS
     )
 
     companion object {
         val instance = State()
         const val DEFAULT_URL = "localhost:47393"
-        const val DEFAULT_TRIGGER_ON_SAVE = true
+        const val DEFAULT_TRIGGER_ON_SAVE: Boolean = true
+        const val DEFAULT_USE_COMPRESSION: Boolean = false
+        const val DEFAULT_OPTIMIZE_IMPORTS: Boolean = true
+        const val DEFAULT_SHOW_NOTIFICATIONS: Boolean = true
     }
 }
