@@ -46,6 +46,9 @@ repositories {
     maven("https://jetbrains.bintray.com/intellij-third-party-dependencies")
 }
 
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32")
+}
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
