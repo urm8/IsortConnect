@@ -11,11 +11,10 @@ class Configurable : com.intellij.openapi.options.Configurable {
     override fun isModified(): Boolean {
         val settings = IsortConnectService.instance
         return settings.url != _component.isortdURI ||
-                settings.triggerOnSave != _component.triggerOnSave ||
-                settings.pyprojectToml != _component.pyprojectToml ||
-                settings.optimizeImports != _component.optimizeImports ||
-                settings.showNotifications != _component.showNotifications ||
-                settings.useCompression != _component.useCompression
+            settings.triggerOnSave != _component.triggerOnSave ||
+            settings.pyprojectToml != _component.pyprojectToml ||
+            settings.optimizeImports != _component.optimizeImports ||
+            settings.showNotifications != _component.showNotifications
     }
 
     override fun getDisplayName(): String {
@@ -33,7 +32,6 @@ class Configurable : com.intellij.openapi.options.Configurable {
         state.pyprojectToml = _component.pyprojectToml
         state.optimizeImports = _component.optimizeImports
         state.showNotifications = _component.showNotifications
-        state.useCompression = _component.useCompression
 
         VirtualFileUtil.findFile(state.pyprojectToml)?.run {
             state.pyprojectConf = PyProjectParser.parse(this)
@@ -47,7 +45,6 @@ class Configurable : com.intellij.openapi.options.Configurable {
         _component.pyprojectToml = settings.pyprojectToml
         _component.optimizeImports = settings.optimizeImports
         _component.showNotifications = settings.showNotifications
-        _component.useCompression = settings.useCompression
     }
 
     override fun createComponent(): JComponent {

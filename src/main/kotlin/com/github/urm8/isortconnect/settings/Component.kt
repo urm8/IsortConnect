@@ -27,19 +27,20 @@ class Component {
     private val urlLabel = JBLabel("URI of \"isortd\" service:")
     private val urlBox = JBBox.createHorizontalBox().apply {
         this.add(urlTextField)
-        this.add(JButton("Check connection").apply {
-            this.addActionListener {
-                GlobalScope.launch(Dispatchers.IO) {
-                    val isReachable = SorterService.ping()
-                    ApplicationManager.getApplication().invokeLater(
+        this.add(
+            JButton("Check connection").apply {
+                this.addActionListener {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        val isReachable = SorterService.ping()
+                        ApplicationManager.getApplication().invokeLater(
                             {
                                 PingDialog(isReachable).showAndGet()
                             },
                             ModalityState.stateForComponent(rootPane)
-                    )
+                        )
+                    }
                 }
             }
-        }
         )
     }
 
@@ -61,10 +62,6 @@ class Component {
     }
     private val showNotificationsCheckBox = JBCheckBox().apply {
         this.text = "Show notifications"
-    }
-    private val useCompressionCheckBox = JBCheckBox().apply {
-        this.text = "Use compression in requests"
-        this.isEnabled = false
     }
 
     var isortdURI: String
@@ -89,12 +86,6 @@ class Component {
             triggerOptimizeImportsCheckBox.isSelected = value
         }
 
-    var useCompression: Boolean
-        get() = useCompressionCheckBox.isSelected
-        set(value) {
-            useCompressionCheckBox.isSelected = value
-        }
-
     var showNotifications: Boolean
         get() = showNotificationsCheckBox.isSelected
         set(value) {
@@ -107,8 +98,6 @@ class Component {
         this.addComponent(triggerOnSaveCheckBox)
         this.addComponent(triggerOptimizeImportsCheckBox)
         this.addComponent(showNotificationsCheckBox)
-        this.addComponent(useCompressionCheckBox)
         this.addComponentFillVertically(JPanel(), this.lineCount)
     }.panel
-
 }

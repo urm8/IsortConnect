@@ -62,18 +62,18 @@ class SorterService(private val project: @NotNull Project) {
                     }
                     if (settings.pyprojectToml.isNotBlank()) {
                         val roots = LocalFileSystem.getInstance().findFileByPath(settings.pyprojectToml)!!
-                                .parent.children.filter { virtualFile -> hasPythonModules(virtualFile) }.joinToString(",") { file -> file.path }
+                            .parent.children.filter { virtualFile -> hasPythonModules(virtualFile) }.joinToString(",") { file -> file.path }
                         setRequestProperty("XX-SRC", roots)
                     } else if (projectRootManager.contentSourceRoots.isNotEmpty()) {
                         val srcRoots =
-                                projectRootManager.contentSourceRoots.joinToString(separator = ",") { elem -> elem.path }
+                            projectRootManager.contentSourceRoots.joinToString(separator = ",") { elem -> elem.path }
                         setRequestProperty("XX-SRC", srcRoots)
                     } else {
                         val roots = projectRootManager.contentRoots.flatMap { vf ->
                             vf.children.filter { child ->
                                 child.isDirectory && child.findChild("__init__.py") != null || child.children.any { grandChild ->
                                     grandChild != null && grandChild.isDirectory && child.findChild(
-                                            "__init__.py"
+                                        "__init__.py"
                                     ) != null
                                 }
                             }
@@ -84,20 +84,10 @@ class SorterService(private val project: @NotNull Project) {
                     connectTimeout = Duration.ofSeconds(defaultTimeOutSeconds).toMillis().toInt()
                     doOutput = true
                     try {
-                        // FIXME
-//                        val body: String = if (settings.useCompression) {
-//                            setRequestProperty("Accept-encoding", "gzip, deflated")
-//                            setRequestProperty("Content-Encoding", "gzip, deflated")
-//                            val requestBodyWriter = ZlibCompressor().getOutputStream(outputStream).bufferedWriter()
-//                            requestBodyWriter.write(contents)
-//                            requestBodyWriter.flush()
-//                            inputStream.bufferedReader().readText()
-//                        } else {
                         val requestBodyWriter = outputStream.bufferedWriter()
                         requestBodyWriter.write(contents)
                         requestBodyWriter.flush()
                         val body = inputStream.bufferedReader().readText()
-//                        }
                         if (responseCode != HTTP_OK) {
                             logger.warn("Got non 200 status code $responseCode: $body")
                             return@launch
@@ -153,15 +143,15 @@ class SorterService(private val project: @NotNull Project) {
             }
             var pythonFilesFound = false
             VfsUtilCore.iterateChildrenRecursively(
-                    dir,
-                    { gch -> gch.isDirectory || !gch.extension.isNullOrBlank() && gch.extension.equals("py") },
-                    { file: VirtualFile ->
-                        if (file.isDirectory) {
-                            return@iterateChildrenRecursively true
-                        }
-                        pythonFilesFound = true
-                        false
+                dir,
+                { gch -> gch.isDirectory || !gch.extension.isNullOrBlank() && gch.extension.equals("py") },
+                { file: VirtualFile ->
+                    if (file.isDirectory) {
+                        return@iterateChildrenRecursively true
                     }
+                    pythonFilesFound = true
+                    false
+                }
             )
             if (!pythonFilesFound) {
                 excludeDirs.add(dir.name)
