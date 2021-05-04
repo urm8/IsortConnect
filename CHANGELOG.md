@@ -3,8 +3,11 @@
 # IsortConnect Changelog
 ## [Unreleased]
 ### Added
+- optimize imports option before sort
+- progress indicator
 
 ### Changed
+- settings window
 
 ### Deprecated
 
