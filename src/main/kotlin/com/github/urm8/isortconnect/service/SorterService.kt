@@ -1,7 +1,6 @@
 package com.github.urm8.isortconnect.service
 
 import com.github.urm8.isortconnect.settings.IsortConnectService
-import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.application.WriteAction
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.Service
@@ -10,7 +9,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.progress.Task.*
+import com.intellij.openapi.progress.Task
 import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectRootManager
@@ -47,7 +46,7 @@ class SorterService(private val project: @NotNull Project) {
     }
 
     private fun run(document: @NotNull Document, vf: @NotNull VirtualFile) {
-        val task = object : Backgroundable(project, "Sorting imports...") {
+        val task = object : Task.Backgroundable(project, "Sorting imports...") {
             override fun run(p0: ProgressIndicator) {
                 sortImports(document, vf)
             }
@@ -76,18 +75,18 @@ class SorterService(private val project: @NotNull Project) {
                     }
                     if (settings.pyprojectToml.isNotBlank()) {
                         val roots = LocalFileSystem.getInstance().findFileByPath(settings.pyprojectToml)!!
-                                .parent.children.filter { virtualFile -> hasPythonModules(virtualFile) }.joinToString(",") { file -> file.path }
+                            .parent.children.filter { virtualFile -> hasPythonModules(virtualFile) }.joinToString(",") { file -> file.path }
                         setRequestProperty("XX-SRC", roots)
                     } else if (projectRootManager.contentSourceRoots.isNotEmpty()) {
                         val srcRoots =
-                                projectRootManager.contentSourceRoots.joinToString(separator = ",") { elem -> elem.path }
+                            projectRootManager.contentSourceRoots.joinToString(separator = ",") { elem -> elem.path }
                         setRequestProperty("XX-SRC", srcRoots)
                     } else {
                         val roots = projectRootManager.contentRoots.flatMap { vf ->
                             vf.children.filter { child ->
                                 child.isDirectory && child.findChild("__init__.py") != null || child.children.any { grandChild ->
                                     grandChild != null && grandChild.isDirectory && child.findChild(
-                                            "__init__.py"
+                                        "__init__.py"
                                     ) != null
                                 }
                             }
@@ -157,15 +156,15 @@ class SorterService(private val project: @NotNull Project) {
             }
             var pythonFilesFound = false
             VfsUtilCore.iterateChildrenRecursively(
-                    dir,
-                    { gch -> gch.isDirectory || !gch.extension.isNullOrBlank() && gch.extension.equals("py") },
-                    { file: VirtualFile ->
-                        if (file.isDirectory) {
-                            return@iterateChildrenRecursively true
-                        }
-                        pythonFilesFound = true
-                        false
+                dir,
+                { gch -> gch.isDirectory || !gch.extension.isNullOrBlank() && gch.extension.equals("py") },
+                { file: VirtualFile ->
+                    if (file.isDirectory) {
+                        return@iterateChildrenRecursively true
                     }
+                    pythonFilesFound = true
+                    false
+                }
             )
             if (!pythonFilesFound) {
                 excludeDirs.add(dir.name)
