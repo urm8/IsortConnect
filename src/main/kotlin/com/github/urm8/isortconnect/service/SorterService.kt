@@ -121,9 +121,13 @@ class SorterService(private val project: @NotNull Project) {
     }
 
     private fun optimizeImports(project: Project, document: @NotNull Document) {
-        WriteAction.runAndWait<Exception> {
-            val psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document)!!
-            PyImportOptimizer.onlyRemoveUnused().processFile(psiFile).run()
+        try {
+            WriteAction.runAndWait<Exception> {
+                val psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document)!!
+                PyImportOptimizer.onlyRemoveUnused().processFile(psiFile).run()
+            }
+        } catch (e: Exception) {
+            logger.warn("failed to optimize imports: %s", e)
         }
     }
 

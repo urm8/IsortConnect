@@ -2,41 +2,8 @@
 
 # IsortConnect Changelog
 ## [Unreleased]
-### Added
-
 ### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.0.12]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-## [0.0.12]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
+- wrap optimize imports handler in try/catch for now ;(
 ## [0.0.12]
 ### Added
 - optimize imports option before sort
