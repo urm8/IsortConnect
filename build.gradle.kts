@@ -58,7 +58,7 @@ intellij {
 //    downloadSources = false
 //    updateSinceUntilBuild = true
 //    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
+//    setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
     val ideaVersion: String by project
     version.set(ideaVersion)
     updateSinceUntilBuild.set(true)
