@@ -3,7 +3,7 @@
 # IsortConnect Changelog
 ## [Unreleased]
 ### Added
-- Migrate to PyCharm 2021.2 
+- Migrate to PyCharm 2022.2
 ### Changed
 - wrap optimize imports handler in try/catch for now ;(
 ## [0.0.12]
