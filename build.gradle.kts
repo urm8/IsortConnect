@@ -63,7 +63,7 @@ intellij {
     version.set(ideaVersion)
     updateSinceUntilBuild.set(true)
     pluginName.set(pluginName_)
-    plugins.set(listOf("Pythonid"))
+    setPlugins(listOf("Pythonid"))
 }
 
 tasks {
