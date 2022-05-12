@@ -8,7 +8,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.4.10"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.5.0"
+    id("org.jetbrains.intellij") version "1.5.3"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.changelog") version "0.6.2"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
@@ -52,13 +52,18 @@ dependencies {
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    pluginName = pluginName_
-    version = platformVersion
-    type = platformType
-    downloadSources = false
-    updateSinceUntilBuild = true
-    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
+//    pluginName = pluginName_
+//    version = platformVersion
+//    type = platformType
+//    downloadSources = false
+//    updateSinceUntilBuild = true
+//    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
+    val ideaVersion: String by project
+    version.set(ideaVersion)
+    updateSinceUntilBuild.set(true)
+    pluginName.set(pluginName_)
+    plugins.set(listOf("Pythonid"))
 }
 
 tasks {
